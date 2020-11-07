@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -26,6 +27,36 @@ class MainActivity : AppCompatActivity() {
 
         isExternalStorageWritable()
         isExternalStorageReadable()
+
+        allocateInternalMemoryForUseAsExternalStorage()
+
+        /*Para fins de teste, em dispositivos sem armazenamento externo removível, utilize o comando abaixo para habilitar um disco virtual*/
+        //adb shell sm set-virtual-disk true
+
+        storesMediaContentInSpecificAppDirectoriesOnExternalStorage()
+    }
+
+    private fun storesMediaContentInSpecificAppDirectoriesOnExternalStorage() {
+        /*Conteúdo de mídia - para armazenar arquivos de mídia como documentos, imagens, aúdio, vídeo etc, que sejam úteis apenas dentro
+        *do app, é recomendável armazená-los em diretórios específicos do app no armazenamento externo. */
+        val albumName = "albumName"
+        val file = File(
+            applicationContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+            "albumName"
+        )
+        if (!file.mkdirs()) {
+            Log.e("HSS", "Directory not created")
+        }
+        //Devo usar nomes de diretórios fornecidos por constantes da API, como DIRECTORY_PICTURES, DIRECTORY_DOCUMENTS, DOCUMENTS_MOVIES
+        //Esses nomes de diretório garantem que os arquivos sejam tratados de forma adequada pelo sistema.
+    }
+
+    private fun allocateInternalMemoryForUseAsExternalStorage() {
+        //Um dispositivo alocando uma partição da própria memória interna para uso como armazenamento externo e também um slot
+        //para cartão SD. O primeiro elemento retorna o volume de armazenamento externo principal.
+        val externalStorageVolumes: Array<out File> =
+            ContextCompat.getExternalFilesDirs(applicationContext, null)
+        val primaryExternalStorage = externalStorageVolumes[0]
     }
 
     /* Verifica se o armazenamento externo está disponível para leitura e escrita */
