@@ -11,6 +11,11 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        const val TAG = "teste"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             "albumName"
         )
         if (!file.mkdirs()) {
-            Log.e("HSS", "Directory not created")
+            Log.e(TAG, "Directory not created")
         }
         //Devo usar nomes de diretórios fornecidos por constantes da API, como DIRECTORY_PICTURES, DIRECTORY_DOCUMENTS, DOCUMENTS_MOVIES
         //Esses nomes de diretório garantem que os arquivos sejam tratados de forma adequada pelo sistema.
@@ -100,7 +105,7 @@ class MainActivity : AppCompatActivity() {
         applicationContext.openFileInput(streamFileName).use {
             fileContent = it.readBytes().decodeToString()
         }
-        Log.d("teste", "Content file is $fileContent")
+        Log.d(TAG, "Content file is $fileContent")
 
     }
 
@@ -164,7 +169,7 @@ class MainActivity : AppCompatActivity() {
         //Ver lista de arquivos do diretório interno
         val internalDirectoryFilesList: Array<String> = applicationContext.fileList()
         internalDirectoryFilesList.forEachIndexed { index, it ->
-            Log.i("teste", "$index - $it}")
+            Log.i(TAG, "$index - $it}")
         }
     }
 }
