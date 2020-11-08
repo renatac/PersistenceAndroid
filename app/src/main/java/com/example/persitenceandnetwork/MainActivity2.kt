@@ -21,14 +21,6 @@ class MainActivity2 : AppCompatActivity() {
         readerFileWithJetpackSecurity()
 
         sharedDirectoryOnAndroid9OrHigher()
-
-        //Armazenamento compartilhado:
-        /*<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-           android:maxSdkVersion="28" />*/
-
-        /* Apenas para acesso aos arquivos das coleções MediaStore.Images, MediaStore.Video, MediaStore.Audio. Se o app quiser
-           acessar a coleção MediaStore.Downloads que ele criou usar o SAF. */
-
     }
 
     //getExternalStoragePublicDirectory is deprecated, como solucionar isso?        ?????????????????????????????????????
@@ -79,5 +71,6 @@ class MainActivity2 : AppCompatActivity() {
         }
         Log.e("teste", contents)
     }
+
 
 }
