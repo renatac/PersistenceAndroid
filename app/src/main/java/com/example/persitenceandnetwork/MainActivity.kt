@@ -47,17 +47,19 @@ class MainActivity : AppCompatActivity() {
         val albumName = "albumName"
         val file = File(
             applicationContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-            "albumName"
+            albumName
         )
         if (!file.mkdirs()) {
             Log.e(TAG, "Directory not created")
         }
-        //Devo usar nomes de diretórios fornecidos por constantes da API, como DIRECTORY_PICTURES, DIRECTORY_DOCUMENTS, DOCUMENTS_MOVIES
+        //Devo usar nomes de diretórios fornecidos por constantes da API, como DIRECTORY_PICTURES, DIRECTORY_DOCUMENTS,
+        //DOCUMENTS_MOVIES
         //Esses nomes de diretório garantem que os arquivos sejam tratados de forma adequada pelo sistema.
     }
 
     private fun allocateInternalMemoryForUseAsExternalStorage() {
-        //Um dispositivo alocando uma partição da própria memória interna para uso como armazenamento externo e também um slot
+        //Um dispositivo alocando uma partição da própria memória interna para uso como armazenamento externo e também
+        // um slot
         //para cartão SD. O primeiro elemento retorna o volume de armazenamento externo principal.
         val externalStorageVolumes: Array<out File> =
             ContextCompat.getExternalFilesDirs(applicationContext, null)
@@ -161,7 +163,7 @@ class MainActivity : AppCompatActivity() {
         cacheExternalFile.delete()
         //applicationContext.deleteFile(cacheExternalFileName)
 
-        //Dúvida como apagar um diretório cache criado desta forma?
+        //Dúvida como apagar um diretório cache criado desta forma          ????????????????????     ???????????????????
         File.createTempFile(cacheExternalFileName, null, applicationContext.cacheDir)
         //cacheInternalFile.delete()
         //applicationContext.deleteFile(cacheInternalFile)

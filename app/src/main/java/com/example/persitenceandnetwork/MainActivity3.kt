@@ -4,13 +4,17 @@ import android.content.ContentUris
 import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
-import android.media.Image
+import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import androidx.appcompat.app.AppCompatActivity
+
 
 class MainActivity3 : AppCompatActivity() {
+
+    lateinit var imageUri: Uri
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main3)
@@ -65,26 +69,27 @@ class MainActivity3 : AppCompatActivity() {
 
         getImages()
 
-        takingAnImageViauri()
+        takingAnImageViaUri()
 
         saveOneImagePartOne()
 
     }
 
-    private fun saveOneImagePartOe() {
+    private fun saveOneImagePartOne() {
         val name = "name"
-        // Quem seria o bucketName"?               ?????????????????????????????????????????????????????????
+        val bucketName = "fotosNiver"
         val values = ContentValues().apply { put(MediaStore.Images.Media.DISPLAY_NAME, name)
             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
             put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/$bucketName/")
             put(MediaStore.Images.Media.IS_PENDING, 1)
         }
         val collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        val imageUri = applicationContext.contentResolver.insert(collection, values)
+        imageUri = applicationContext.contentResolver.insert(collection, values)!!
+        val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
 
         imageUri?.let {
-            // Quem seria o bmp"?               ?????????????????????????????????????????????????????????
-            applicationContext.contentResolver.openOutputStream(it).use { out -> bmp.compress(Bitmap.CompressFormat.JPEG, 90, out)
+            applicationContext.contentResolver.openOutputStream(it).use { out ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
             }
         }
         values.clear()
@@ -92,14 +97,14 @@ class MainActivity3 : AppCompatActivity() {
         imageUri?.let { applicationContext.contentResolver.update(it, values, null, null) }
     }
 
-    private fun takingAnImageViauri() {
-        //Qual o exemplo pra essa uri?           ???????????????????????????????????????????????
+    private fun takingAnImageViaUri() : Any? {
         val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
+            ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, imageUri))
         } else {
-            contentResolver.openInputStream(uri)?.use { inputStream ->
+            contentResolver.openInputStream(imageUri)?.use { inputStream ->
             }
         }
+        return bitmap
     }
 
     //Consultar uma coleção de mídia
@@ -131,4 +136,11 @@ class MainActivity3 : AppCompatActivity() {
         }
         return list
     }
+
+    data class Image(
+        var id: Long,
+        var displayName: String,
+        var contentUri: Uri
+    )
+
 }
